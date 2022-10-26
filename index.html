@@ -6,12 +6,12 @@
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <div class="box">
+        <div id="box" class="box">
             <div class="form">
-                <h2>Inicio de Sesión</h2>
-                <div class="inputBox">
+                <h2 id="login" class="txt">Inicio de Sesión</h2>
+                <div id="a" class="inputBox">
                     <input type="text" required="required">
-                    <span>Nombre de usuario</span>
+                    <span id="name">Nombre de usuario</span>
                     <i></i>
                 </div>
                 <div class="inputBox">
@@ -20,11 +20,32 @@
                     <i></i>
                 </div>
                 <div class="links">
-                    <a href="#">Contraseña olvidada</a>
-                    <a href="#">Resgistrarse</a>
+                    <a id="link" href="#">Contraseña olvidada</a>
+                    <a id="link2" href="#">Resgistrarse</a>
                 </div>
-                <input type="submit" value="Iniciar Sesión">
+                <input type="submit" value="Iniciar Sesión" id="btn">
             </div>
         </div>
+        <div class="colors">
+            <span class="active" onclick="changeColor('#ff67d7')" style="--clr:#ff67d7;"></span>
+            <span onclick="changeColor('#FF9B00')" style="--clr:#FF9B00;"></span>
+            <span onclick="changeColor('#1BFF00')" style="--clr:#1BFF00;"></span>
+            <span onclick="changeColor('#00FBFF')" style="--clr:#00FBFF;"></span>
+            <span onclick="changeColor('#FF0000')" style="--clr:#FF0000;"></span>
+        </div>
+
+        <script>
+            let btn = document.getElementById('btn');
+            let link = document.getElementById('link');
+            let link2 = document.getElementById('link2');
+            let login = document.getElementById('login');
+            let name = document.getElementById('name');
+            function changeColor(color){
+                btn.style.background = color;
+                link2.style.color = color;
+                login.style.color = color;
+                name.style.input = color;
+            }
+        </script>
     </body>
 </html>
