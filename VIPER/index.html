@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="main.css">
+    <title>VIPER</title>
+</head>
+<body>
+    <div class="main">
+        <nav>
+            <div class="logo">
+                <img src="/VIPER/assets/img/Logo_text2.png">
+            </div>
+            <div class="nav-links">
+            <ul>
+                <li><a href="/VIPER/index.html">Principal</a></li>
+                <li><a href="/VIPER/fundas.html">Fundas</a></li>
+                <li><a href="#">Nosotros</a></li>
+                <li><a href="#">Donaciones</a></li>
+                <li><a href="/index.html">Moohja</a></li>
+            </ul>
+        </div>
+        </nav>
+
+        <div class="information">
+            <div class="overlay"></div>
+            <img src="/VIPER/assets/img/case.png" class="case">
+            <div id="circle">
+              <div class="feature agua">
+                <img src="/VIPER/assets/img/tear.svg">
+                <div>
+                    <h1>Agua</h1>
+                    <p>Resistente hasta 3m de profundidad</p>
+                </div>
+              </div>
+              <div class="feature pagos">
+                <img src="/VIPER/assets/img/transaction.svg">
+                <div>
+                    <h1>Pagos</h1>
+                    <p>Esta funda no impide los pagos via NFC</p>
+                </div>
+              </div>
+              <div class="feature bluetooth">
+                <img src="/VIPER/assets/img/bluetooth-w.svg">
+                <div>
+                    <h1>Bluetooth</h1>
+                    <p>Conectado mediante bluetooth</p>
+                </div>
+              </div>
+              <div class="feature escucha">
+                <img src="/VIPER/assets/img/microphone.svg">
+                <div>
+                    <h1>Microfono</h1>
+                    <p>Puedes hablarle a la funda</p>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <img src="/VIPER/assets/img/arrow.svg" id="Arriba">
+            <h3>Novedades</h3>
+            <img src="/VIPER/assets/img/arrow.svg" id="Abajo">
+        </div>
+
+    </div>
+
+
+    <script>
+        var circle = document.getElementById("circle");
+        var Arriba = document.getElementById("Arriba");
+        var Abajo = document.getElementById("Abajo");
+
+        var rotateValue = circle.style.transform;
+        var rotateSum;
+
+        Arriba.onclick = function()
+        {
+            rotateSum = rotateValue + "rotate(-90deg)";
+            circle.style.transform = rotateSum
+            rotateValue = rotateSum;
+        }
+        Abajo.onclick = function()
+        {
+            rotateSum = rotateValue + "rotate(90deg)";
+            circle.style.transform = rotateSum
+            rotateValue = rotateSum;
+        }
+    </script>
+</body>
+</html>
