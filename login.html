@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Inicio de Sesión</title>
+        <link rel="stylesheet" href="login.css">
+    </head>
+    <body>
+        <div id="box" class="box">
+            <div class="form" method="post" action="connection_bd.php">
+                <h2 id="login" class="txt">Inicio de Sesión</h2>
+                <div id="a" class="inputBox">
+                    <input type="text" required="required">
+                    <span name="name" class="input" id="name">Nombre de usuario</span>
+                    <i></i>
+                </div>
+                <div class="inputBox">
+                    <input name="password" id="password" class="input" type="password" required="required">
+                    <span>Contraseña</span>
+                    <i></i>
+                </div>
+                <div class="links">
+                    <a id="link" href="#">Contraseña olvidada</a>
+                    <a id="link2" href="../Register/index.html">Resgistrarse</a>
+                </div>
+                <form action=adminpanel.html>
+                <input type="submit" value="Iniciar Sesión" id="btn">
+                </form>
+            </div>
+        </div>
+        <div class="colors" id="ColorPanel">
+            <span data-color="#ff67d7" class="active PinkColor" style="--clr:#ff67d7;"></span>
+            <span data-color="#FF9B00" class="OrangeColor" style="--clr:#FF9B00;"></span>
+            <span data-color="#1BFF00" class="GreenColor" style="--clr:#1BFF00;"></span>
+            <span data-color="#00FBFF" class="SkyBlueColor" style="--clr:#00FBFF;"></span>
+            <span data-color="#FF0000" class="RedColor" style="--clr:#FF0000;"></span>
+            <span data-color="#FFFF" class="WhiteColor" style="--clr:#FFFF;"></span>
+        </div>
+        <script src="login.js">
+        </script>
+    </body>
+</html>

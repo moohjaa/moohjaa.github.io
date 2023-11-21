@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Arabic Moon</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="adminpanel.css">
+</head>
+<body>
+    <div class="container">
+        <div class="navigation">
+            <ul>
+                <li>
+                    <a href="#">
+                        <span class="icon"> <ion-icon name="cafe-outline">"></ion-icon></span>
+                        <span class="title">Arabic Moon</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="icon"><ion-icon name="home-outline"></ion-icon></span>
+                        <span class="title">Principal</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="icon"><ion-icon name="people-outline"></ion-icon></span>
+                        <span class="title">Clientes</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="icon"><ion-icon name="chatbubble-ellipses-outline"></ion-icon></span>
+                        <span class="title">Mensajes</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="icon"><ion-icon name="help-circle-outline"></ion-icon></span>
+                        <span class="title">Ayuda</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="icon"><ion-icon name="settings-outline"></ion-icon></span>
+                        <span class="title">Ajustes</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="icon"><ion-icon name="lock-closed-outline"></ion-icon></span>
+                        <span class="title">Contraseña</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="index.html">
+                        <span class="icon"><ion-icon name="exit-outline"></ion-icon></span>
+                        <span class="title">Salir</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- main -->
+        <div class="main">
+            <div class="topbar">
+                <div class="toggle">
+                    <ion-icon name="menu-outline"></ion-icon>
+                </div>
+                <!-- Busqueda -->
+                <div class="search">
+                    <label>
+                        <input type="text" placeholder="Busca aqui">
+                        <ion-icon name="search-outline"></ion-icon>
+                    </label>
+                </div>
+                <!-- Usuario -->
+                <div class="user">
+                    <img src="/VIPER/assets/img/Logo_3.png" alt="">
+                </div>
+            </div>
+            
+            <!-- Tarjetas -->
+            <div class="cardBox">
+                <div class="card">
+                    <div>
+                        <div class="numbers">378</div>
+                        <div class="cardName">Visitas Diarias</div>
+                    </div>
+                    <div class="iconBx">
+                        <ion-icon name="eye-outline"></ion-icon>
+                    </div>
+                </div>
+                <div class="card">
+                    <div>
+                        <div class="numbers">4.800</div>
+                        <div class="cardName">Ventas</div>
+                    </div>
+                    <div class="iconBx">
+                        <ion-icon name="cart-outline"></ion-icon>
+                    </div>
+                </div>
+                <div class="card">
+                    <div>
+                        <div class="numbers">55</div>
+                        <div class="cardName">Mensajes</div>
+                    </div>
+                    <div class="iconBx">
+                        <ion-icon name="chatbox-ellipses-outline"></ion-icon>
+                    </div>
+                </div>
+                <div class="card">
+                    <div>
+                        <div class="numbers">105.072€</div>
+                        <div class="cardName">Ganancias</div>
+                    </div>
+                    <div class="iconBx">
+                        <ion-icon name="cash-outline"></ion-icon>
+                    </div>
+                </div>
+            </div>
+            <!-- Lista detalles de pedidos -->
+            <div class="details">
+                <div class="recentOrders">
+                    <div class="cardHeader">
+                        <h2>Pedidos Recientes</h2>
+                        <a href="#" class="btn">Ver Todo</a>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <td>Nombre</td>
+                                <td>Precio</td>
+                                <td>Pago</td>
+                                <td>Estado</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Desayuno</td>
+                                <td>15.99€</td>
+                                <td>Pagado</td>
+                                <td><span class="status delivered">Enviado</span></td>
+                            </tr>
+                            <tr>
+                                <td>Desayuno</td>
+                                <td>15.99€</td>
+                                <td>Pendiente</td>
+                                <td><span class="status pending">Pendiente</span></td>
+                            </tr>
+                            <tr>
+                                <td>Comida</td>
+                                <td>00.00€</td>
+                                <td>Gratis</td>
+                                <td><span class="status return">Cambio</span></td>
+                            </tr>
+                            <tr>
+                                <td>Cena</td>
+                                <td>20.99€</td>
+                                <td>Pagado</td>
+                                <td><span class="status inprogress">En progreso</span></td>
+                            </tr>
+                            <tr>
+                                <td>Comida</td>
+                                <td>20.99€</td>
+                                <td>Pagado</td>
+                                <td><span class="status delivered">Enviado</span></td>
+                            </tr>
+                            <tr>
+                                <td>Desayuno</td>
+                                <td>20.99€</td>
+                                <td>Pendiente</td>
+                                <td><span class="status pending">Pendiente</span></td>
+                            </tr>
+                            <tr>
+                                <td>Cena</td>
+                                <td>20.99€</td>
+                                <td>Pagado</td>
+                                <td><span class="status delivered">Enviado</span></td>
+                            </tr>
+                            <tr>
+                                <td>Desayuno</td>
+                                <td>20.99€</td>
+                                <td>Pagado</td>
+                                <td><span class="status inprogress">En progreso</span></td>
+                            </tr>
+                            <tr>
+                                <td>Personalizado</td>
+                                <td>196.73€</td>
+                                <td>Pagado</td>
+                                <td><span class="status delivered">Enviado</span></td>
+                            </tr>
+                            <tr>
+                                <td>Personalizado</td>
+                                <td>413.99€</td>
+                                <td>Pendiente</td>
+                                <td><span class="status pending">Pendiente</span></td>
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pedidos Nuevos -->
+                <div class="recentCustomers">
+                    <div class="recentOrders">
+                        <div class="cardHeader">
+                            <h2>Clientes Recientes</h2>
+                        </div>
+                        <table>
+                            <tr>
+                                <td width="60px"><div class="imgBx"><img src="/VIPER/assets/img/img1.jpg"></div></td>
+                                <td><h4>Miguelito<br><span>Sanchez</span></h4></td>
+                            </tr>
+                            <tr>
+                                <td width="60px"><div class="imgBx"><img src="/VIPER/assets/img/img2.jpg"></div></td>
+                                <td><h4>Isi<br><span>Andubiera</span></h4></td>
+                            </tr>
+                            <tr>
+                                <td width="60px"><div class="imgBx"><img src="/VIPER/assets/img/img3.jpg"></div></td>
+                                <td><h4>MasMe<br><span>Gustaria</span></h4></td>
+                            </tr>
+                            <tr>
+                                <td width="60px"><div class="imgBx"><img src="/VIPER/assets/img/img4.jpg"></div></td>
+                                <td><h4>Pe<br><span>Nelo</span></h4></td>
+                            </tr>
+                            <tr>
+                                <td width="60px"><div class="imgBx"><img src="/VIPER/assets/img/img5.jpg"></div></td>
+                                <td><h4>Pedro<br><span>ordep</span></h4></td>
+                            </tr>
+                            <tr>
+                                <td width="60px"><div class="imgBx"><img src="/VIPER/assets/img/img6.jpg"></div></td>
+                                <td><h4>Asta<br><span>Clover</span></h4></td>
+                            </tr>
+                            <tr>
+                                <td width="60px"><div class="imgBx"><img src="/VIPER/assets/img/img7.jpg"></div></td>
+                                <td><h4>Ana<br><span>Jesulina</span></h4></td>
+                            </tr>
+                            <tr>
+                                <td width="60px"><div class="imgBx"><img src="/VIPER/assets/img/img8.jpg"></div></td>
+                                <td><h4>Augustus<br><span>Desagustus</span></h4></td>
+                            </tr>
+                            <tr>
+                                <td width="60px"><div class="imgBx"><img src="/VIPER/assets/img/img9.jpg"></div></td>
+                                <td><h4>Zora<br><span>Maria</span></h4></td>
+                            </tr>
+                        </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+    <script>
+        // Menu esconder/enseñar
+        let toggle = document.querySelector('.toggle');
+        let navigation = document.querySelector('.navigation');
+        let main = document.querySelector('.main');
+
+        toggle.onclick = function(){
+            navigation.classList.toggle('active');
+            main.classList.toggle('active');
+        }
+
+        // Ver el mantienido con el inspeccionaR elemento
+        let list = document.querySelectorAll('.navigation li');
+        function activateLink(){
+        list.forEach((item) =>
+        item.classList.remove('hovered'));
+        this.classList.add('hovered');
+    }
+    list.forEach((item) =>
+    item.addEventListener('mouseover', activateLink));
+    </script>
+</body> 
+</html>
