@@ -119,46 +119,36 @@ loginForm.addEventListener('submit', async (e) => {
     submitBtn.classList.add('loading');
     submitBtn.disabled = true;
     
-    try {
-        const response = await fetch('auth.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                action: 'login',
-                email: email,
-                password: password,
-                remember: rememberMe
-            })
-        });
-        
-        const data = await response.json();
-        
-        if (data.success) {
-            showModal('¡Bienvenido de vuelta! 💕', 'Has iniciado sesión exitosamente.');
+    // Simular delay de red para una mejor experiencia
+    setTimeout(() => {
+        try {
+            const result = window.romanticAuth.login(email, password, rememberMe);
             
-            // Save session data if remember me is checked
-            if (rememberMe) {
-                localStorage.setItem('userEmail', email);
+            if (result.success) {
+                showModal('¡Bienvenido de vuelta! 💕', 'Has iniciado sesión exitosamente.');
+                
+                // Save session data if remember me is checked
+                if (rememberMe) {
+                    localStorage.setItem('userEmail', email);
+                }
+                
+                // Redirect after 2 seconds
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 2000);
+            } else {
+                showModal('Error de acceso 💔', result.message || 'Credenciales incorrectas.', false);
             }
-            
-            // Redirect after 2 seconds
-            setTimeout(() => {
-                window.location.href = 'dashboard.php';
-            }, 2000);
-        } else {
-            showModal('Error de acceso 💔', data.message || 'Credenciales incorrectas.', false);
+        } catch (error) {
+            console.error('Error:', error);
+            showModal('Error inesperado 💔', 'Algo salió mal. Intenta de nuevo.', false);
+        } finally {
+            // Reset button state
+            submitBtn.innerHTML = originalText;
+            submitBtn.classList.remove('loading');
+            submitBtn.disabled = false;
         }
-    } catch (error) {
-        console.error('Error:', error);
-        showModal('Error de conexión 💔', 'No se pudo conectar con el servidor. Intenta de nuevo.', false);
-    } finally {
-        // Reset button state
-        submitBtn.innerHTML = originalText;
-        submitBtn.classList.remove('loading');
-        submitBtn.disabled = false;
-    }
+    }, 800);
 });
 
 // Register Form Handler
@@ -215,47 +205,36 @@ registerForm.addEventListener('submit', async (e) => {
     submitBtn.classList.add('loading');
     submitBtn.disabled = true;
     
-    try {
-        const response = await fetch('auth.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                action: 'register',
-                username: username,
-                email: email,
-                gender: gender,
-                password: password
-            })
-        });
-        
-        const data = await response.json();
-        
-        if (data.success) {
-            showModal('¡Cuenta creada! 💕', 'Tu cuenta ha sido creada exitosamente. ¡Bienvenido al amor!');
+    // Simular delay de red
+    setTimeout(() => {
+        try {
+            const result = window.romanticAuth.register(username, email, password, gender);
             
-            // Clear form
-            registerForm.reset();
-            
-            // Switch to login form after 2 seconds
-            setTimeout(() => {
-                showLoginForm();
-                // Pre-fill email in login form
-                document.getElementById('loginEmail').value = email;
-            }, 2000);
-        } else {
-            showModal('Error en registro 💔', data.message || 'No se pudo crear la cuenta.', false);
+            if (result.success) {
+                showModal('¡Cuenta creada! 💕', 'Tu cuenta ha sido creada exitosamente. ¡Bienvenido al amor!');
+                
+                // Clear form
+                registerForm.reset();
+                
+                // Switch to login form after 2 seconds
+                setTimeout(() => {
+                    showLoginForm();
+                    // Pre-fill email in login form
+                    document.getElementById('loginEmail').value = email;
+                }, 2000);
+            } else {
+                showModal('Error en registro 💔', result.message || 'No se pudo crear la cuenta.', false);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            showModal('Error inesperado 💔', 'Algo salió mal. Intenta de nuevo.', false);
+        } finally {
+            // Reset button state
+            submitBtn.innerHTML = originalText;
+            submitBtn.classList.remove('loading');
+            submitBtn.disabled = false;
         }
-    } catch (error) {
-        console.error('Error:', error);
-        showModal('Error de conexión 💔', 'No se pudo conectar con el servidor. Intenta de nuevo.', false);
-    } finally {
-        // Reset button state
-        submitBtn.innerHTML = originalText;
-        submitBtn.classList.remove('loading');
-        submitBtn.disabled = false;
-    }
+    }, 1000);
 });
 
 // Social Login Handlers

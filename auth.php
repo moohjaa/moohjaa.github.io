@@ -1,28 +1,48 @@
 <?php
 session_start();
 
-// Database configuration - AQUÍ NECESITARÁS PONER TUS DATOS DE BASE DE DATOS
+// Database configuration - Clever Cloud MySQL
 class Database {
     private $host = 'bmqv7xjigycwryut4zca-mysql.services.clever-cloud.com';
-    private $dbname = 'bmqv7xjigycwryut4zca'; // Nombre de tu base de datos
-    private $username = 'usos5vc8fqdjocre'; // Tu usuario de base de datos
-    private $password = '6Rspbz0HEeA5eXAaErFF'; // Tu contraseña de base de datos
+    private $dbname = 'bmqv7xjigycwryut4zca';
+    private $username = 'usos5vc8fqdjocre';
+    private $password = '6Rspbz0HEeA5eXAaErFF';
+    private $port = 3306; // Puerto por defecto de MySQL
     private $pdo;
     
     public function __construct() {
         try {
-            $this->pdo = new PDO(
-                "mysql:host={$this->host};dbname={$this->dbname};charset=utf8mb4",
-                $this->username,
-                $this->password,
-                [
-                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                    PDO::ATTR_EMULATE_PREPARES => false
-                ]
-            );
+            // Configuración más robusta para Clever Cloud
+            $dsn = "mysql:host={$this->host};port={$this->port};dbname={$this->dbname};charset=utf8mb4";
+            
+            $options = [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_EMULATE_PREPARES => false,
+                PDO::ATTR_TIMEOUT => 30, // Timeout de 30 segundos
+                PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4",
+                PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false, // Para conexiones SSL
+            ];
+            
+            $this->pdo = new PDO($dsn, $this->username, $this->password, $options);
+            
+            // Verificar conexión
+            $this->pdo->query('SELECT 1');
+            
         } catch (PDOException $e) {
-            die("Error de conexión: " . $e->getMessage());
+            // Log detallado del error
+            error_log("Database connection error: " . $e->getMessage());
+            
+            // Mostrar mensaje más amigable según el tipo de error
+            if (strpos($e->getMessage(), 'Access denied') !== false) {
+                die("Error de conexión: Credenciales incorrectas. Verifica usuario y contraseña.");
+            } elseif (strpos($e->getMessage(), 'Unknown database') !== false) {
+                die("Error de conexión: Base de datos no encontrada. Verifica el nombre de la base de datos.");
+            } elseif (strpos($e->getMessage(), 'Connection refused') !== false || strpos($e->getMessage(), 'timed out') !== false) {
+                die("Error de conexión: No se puede conectar al servidor. Verifica el host y puerto, o revisa tu conexión a internet.");
+            } else {
+                die("Error de conexión a la base de datos: " . $e->getMessage());
+            }
         }
     }
     
