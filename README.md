@@ -105,6 +105,25 @@ Este sistema está específicamente optimizado para GitHub Pages:
 3. **Todos los datos** se almacenan localmente
 4. **Funciona inmediatamente** al subir los archivos
 
+## 🗄️ Uso con Base de Datos MySQL (Opcional)
+
+Para usar con servidor y base de datos real:
+
+### Configuración Rápida:
+1. **XAMPP Local:** Ejecutar `setup_local_database.php`
+2. **Servidor:** Configurar `db_config.php` y subir archivos PHP
+3. **Verificación:** Usar `test_connection_new.php` para diagnóstico
+
+### Archivos adicionales para servidor:
+- `auth.php` - Backend de autenticación
+- `db_config.php` - Configuración de base de datos
+- `database_simple.sql` - Script de base de datos
+- `setup_local_database.php` - Configuración automática
+- `test_connection_new.php` - Diagnóstico de conexión
+- `DATABASE_SETUP.md` - Guía completa de configuración
+
+El sistema **detecta automáticamente** si PHP está disponible y alterna entre modo local y servidor.
+
 ### ⚠️ Consideraciones
 
 - Los datos solo existen en el navegador del usuario

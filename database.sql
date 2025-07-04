@@ -10,12 +10,10 @@ USE love_database;
 -- Tabla de usuarios
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    lastname VARCHAR(100) NOT NULL,
+    username VARCHAR(100) NOT NULL UNIQUE,
     email VARCHAR(255) NOT NULL UNIQUE,
-    phone VARCHAR(20),
-    birthdate DATE,
     password VARCHAR(255) NOT NULL,
+    gender ENUM('masculino', 'femenino', 'otro', 'prefiero_no_decir') NOT NULL,
     remember_token VARCHAR(255) NULL,
     is_active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -67,7 +65,9 @@ CREATE TABLE user_sessions (
 
 -- Crear índices para mejorar el rendimiento
 CREATE INDEX idx_users_email ON users(email);
+CREATE INDEX idx_users_username ON users(username);
 CREATE INDEX idx_users_active ON users(is_active);
+CREATE INDEX idx_users_gender ON users(gender);
 CREATE INDEX idx_love_messages_user ON love_messages(user_id);
 CREATE INDEX idx_custom_dates_user ON custom_dates(user_id);
 CREATE INDEX idx_user_stats_user ON user_stats(user_id);
@@ -75,14 +75,12 @@ CREATE INDEX idx_user_sessions_user ON user_sessions(user_id);
 
 -- Insertar algunos datos de ejemplo (opcional)
 -- Usuario de ejemplo (contraseña: password123)
-INSERT INTO users (name, lastname, email, phone, birthdate, password) VALUES 
+INSERT INTO users (username, email, password, gender) VALUES 
 (
-    'María', 
-    'González', 
+    'maria_amor', 
     'maria@ejemplo.com', 
-    '+1234567890', 
-    '1990-05-15', 
-    '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'
+    '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+    'femenino'
 );
 
 -- Estadísticas iniciales para el usuario de ejemplo
@@ -104,11 +102,9 @@ INSERT INTO love_messages (user_id, message) VALUES
 CREATE VIEW user_complete_info AS
 SELECT 
     u.id,
-    u.name,
-    u.lastname,
+    u.username,
     u.email,
-    u.phone,
-    u.birthdate,
+    u.gender,
     u.is_active,
     u.created_at,
     u.last_login,
@@ -151,28 +147,16 @@ BEGIN
 END //
 DELIMITER ;
 
--- Función para calcular la edad
-DELIMITER //
-CREATE FUNCTION CalculateAge(birth_date DATE) 
-RETURNS INT
-READS SQL DATA
-DETERMINISTIC
-BEGIN
-    DECLARE age INT;
-    SET age = YEAR(CURDATE()) - YEAR(birth_date);
-    IF (MONTH(CURDATE()) < MONTH(birth_date)) OR 
-       (MONTH(CURDATE()) = MONTH(birth_date) AND DAY(CURDATE()) < DAY(birth_date)) THEN
-        SET age = age - 1;
-    END IF;
-    RETURN age;
-END //
-DELIMITER ;
-
--- Vista para obtener usuarios con edad calculada
-CREATE VIEW users_with_age AS
+-- Vista para obtener usuarios con género
+CREATE VIEW users_with_gender AS
 SELECT 
     *,
-    CalculateAge(birthdate) as age
+    CASE 
+        WHEN gender = 'masculino' THEN '♂️ Masculino'
+        WHEN gender = 'femenino' THEN '♀️ Femenino'
+        WHEN gender = 'otro' THEN '⚧️ Otro'
+        ELSE '🤐 Prefiero no decir'
+    END as gender_display
 FROM users
 WHERE is_active = TRUE;
 

@@ -119,36 +119,35 @@ loginForm.addEventListener('submit', async (e) => {
     submitBtn.classList.add('loading');
     submitBtn.disabled = true;
     
-    // Simular delay de red para una mejor experiencia
-    setTimeout(() => {
-        try {
-            const result = window.romanticAuth.login(email, password, rememberMe);
+    try {
+        // Obtener el sistema de autenticación apropiado
+        const authSystem = await getAuthSystem();
+        const result = await authSystem.login(email, password, rememberMe);
+        
+        if (result.success) {
+            showModal('¡Bienvenido de vuelta! 💕', 'Has iniciado sesión exitosamente.');
             
-            if (result.success) {
-                showModal('¡Bienvenido de vuelta! 💕', 'Has iniciado sesión exitosamente.');
-                
-                // Save session data if remember me is checked
-                if (rememberMe) {
-                    localStorage.setItem('userEmail', email);
-                }
-                
-                // Redirect after 2 seconds
-                setTimeout(() => {
-                    window.location.href = 'dashboard.html';
-                }, 2000);
-            } else {
-                showModal('Error de acceso 💔', result.message || 'Credenciales incorrectas.', false);
+            // Save session data if remember me is checked
+            if (rememberMe) {
+                localStorage.setItem('userEmail', email);
             }
-        } catch (error) {
-            console.error('Error:', error);
-            showModal('Error inesperado 💔', 'Algo salió mal. Intenta de nuevo.', false);
-        } finally {
-            // Reset button state
-            submitBtn.innerHTML = originalText;
-            submitBtn.classList.remove('loading');
-            submitBtn.disabled = false;
+            
+            // Redirect after 2 seconds
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 2000);
+        } else {
+            showModal('Error de acceso 💔', result.message || 'Credenciales incorrectas.', false);
         }
-    }, 800);
+    } catch (error) {
+        console.error('Error:', error);
+        showModal('Error inesperado 💔', 'Algo salió mal. Intenta de nuevo.', false);
+    } finally {
+        // Reset button state
+        submitBtn.innerHTML = originalText;
+        submitBtn.classList.remove('loading');
+        submitBtn.disabled = false;
+    }
 });
 
 // Register Form Handler
@@ -205,36 +204,35 @@ registerForm.addEventListener('submit', async (e) => {
     submitBtn.classList.add('loading');
     submitBtn.disabled = true;
     
-    // Simular delay de red
-    setTimeout(() => {
-        try {
-            const result = window.romanticAuth.register(username, email, password, gender);
+    try {
+        // Obtener el sistema de autenticación apropiado
+        const authSystem = await getAuthSystem();
+        const result = await authSystem.register(username, email, password, gender);
+        
+        if (result.success) {
+            showModal('¡Cuenta creada! 💕', 'Tu cuenta ha sido creada exitosamente. ¡Bienvenido al amor!');
             
-            if (result.success) {
-                showModal('¡Cuenta creada! 💕', 'Tu cuenta ha sido creada exitosamente. ¡Bienvenido al amor!');
-                
-                // Clear form
-                registerForm.reset();
-                
-                // Switch to login form after 2 seconds
-                setTimeout(() => {
-                    showLoginForm();
-                    // Pre-fill email in login form
-                    document.getElementById('loginEmail').value = email;
-                }, 2000);
-            } else {
-                showModal('Error en registro 💔', result.message || 'No se pudo crear la cuenta.', false);
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            showModal('Error inesperado 💔', 'Algo salió mal. Intenta de nuevo.', false);
-        } finally {
-            // Reset button state
-            submitBtn.innerHTML = originalText;
-            submitBtn.classList.remove('loading');
-            submitBtn.disabled = false;
+            // Clear form
+            registerForm.reset();
+            
+            // Switch to login form after 2 seconds
+            setTimeout(() => {
+                showLoginForm();
+                // Pre-fill email in login form
+                document.getElementById('loginEmail').value = email;
+            }, 2000);
+        } else {
+            showModal('Error en registro 💔', result.message || 'No se pudo crear la cuenta.', false);
         }
-    }, 1000);
+    } catch (error) {
+        console.error('Error:', error);
+        showModal('Error inesperado 💔', 'Algo salió mal. Intenta de nuevo.', false);
+    } finally {
+        // Reset button state
+        submitBtn.innerHTML = originalText;
+        submitBtn.classList.remove('loading');
+        submitBtn.disabled = false;
+    }
 });
 
 // Social Login Handlers
@@ -362,3 +360,128 @@ document.querySelectorAll('input').forEach(input => {
         }
     });
 });
+
+// Función para obtener el sistema de autenticación apropiado
+async function getAuthSystem() {
+    // Verificar si tenemos el config cargado
+    if (typeof window.systemConfig === 'undefined') {
+        console.log('Config no disponible, usando sistema local por defecto');
+        return window.romanticAuth;
+    }
+    
+    // Detectar si estamos en un entorno con servidor
+    const hasServer = await detectServerEnvironment();
+    
+    if (hasServer) {
+        console.log('Servidor detectado, usando autenticación PHP/MySQL');
+        return new ServerAuth();
+    } else {
+        console.log('Sin servidor, usando autenticación local (localStorage)');
+        return window.romanticAuth;
+    }
+}
+
+// Detectar si PHP/servidor está disponible
+async function detectServerEnvironment() {
+    try {
+        const response = await fetch('auth.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ action: 'test' })
+        });
+        
+        return response.ok || response.status === 404; // 404 también indica que PHP está disponible
+    } catch (error) {
+        return false; // Probablemente GitHub Pages o sin servidor
+    }
+}
+
+// Clase para autenticación con servidor (definida aquí si config.js no está disponible)
+if (typeof ServerAuth === 'undefined') {
+    class ServerAuth {
+        async register(username, email, password, gender) {
+            try {
+                const response = await fetch('auth.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'register',
+                        username: username,
+                        email: email,
+                        password: password,
+                        gender: gender
+                    })
+                });
+
+                const result = await response.json();
+                return result;
+            } catch (error) {
+                console.error('Error en registro:', error);
+                return { success: false, message: 'Error de conexión al servidor' };
+            }
+        }
+
+        async login(email, password, remember = false) {
+            try {
+                const response = await fetch('auth.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'login',
+                        email: email,
+                        password: password,
+                        remember: remember
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Crear sesión local para compatibilidad con el dashboard
+                    const sessionData = {
+                        user_id: 1,
+                        user_name: email.split('@')[0],
+                        user_email: email,
+                        user_gender: 'otro',
+                        logged_in: true,
+                        loginTime: new Date().toISOString()
+                    };
+                    
+                    sessionStorage.setItem('romantic_session', JSON.stringify(sessionData));
+                }
+                
+                return result;
+            } catch (error) {
+                console.error('Error en login:', error);
+                return { success: false, message: 'Error de conexión al servidor' };
+            }
+        }
+
+        async logout() {
+            try {
+                const response = await fetch('auth.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'logout'
+                    })
+                });
+
+                const result = await response.json();
+                sessionStorage.removeItem('romantic_session');
+                return result;
+            } catch (error) {
+                console.error('Error en logout:', error);
+                return { success: false, message: 'Error de conexión al servidor' };
+            }
+        }
+    }
+}

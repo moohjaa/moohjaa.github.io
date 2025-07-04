@@ -1,27 +1,42 @@
 <?php
 session_start();
 
-// Database configuration - Clever Cloud MySQL
+// Database configuration
 class Database {
-    private $host = 'bmqv7xjigycwryut4zca-mysql.services.clever-cloud.com';
-    private $dbname = 'bmqv7xjigycwryut4zca';
-    private $username = 'usos5vc8fqdjocre';
-    private $password = '6Rspbz0HEeA5eXAaErFF';
-    private $port = 3306; // Puerto por defecto de MySQL
+    private $host;
+    private $dbname;
+    private $username;
+    private $password;
+    private $port;
     private $pdo;
     
     public function __construct() {
+        // Configuración para desarrollo local (XAMPP/WAMP/MAMP)
+        if ($_SERVER['HTTP_HOST'] === 'localhost' || $_SERVER['HTTP_HOST'] === '127.0.0.1') {
+            $this->host = 'localhost';
+            $this->dbname = 'love_database';
+            $this->username = 'root';
+            $this->password = '';
+            $this->port = 3306;
+        } else {
+            // Configuración para producción (puedes cambiar estos valores)
+            $this->host = 'bmqv7xjigycwryut4zca-mysql.services.clever-cloud.com';
+            $this->dbname = 'bmqv7xjigycwryut4zca';
+            $this->username = 'usos5vc8fqdjocre';
+            $this->password = '6Rspbz0HEeA5eXAaErFF';
+            $this->port = 3306;
+        }
+        
         try {
-            // Configuración más robusta para Clever Cloud
             $dsn = "mysql:host={$this->host};port={$this->port};dbname={$this->dbname};charset=utf8mb4";
             
             $options = [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
                 PDO::ATTR_EMULATE_PREPARES => false,
-                PDO::ATTR_TIMEOUT => 30, // Timeout de 30 segundos
+                PDO::ATTR_TIMEOUT => 30,
                 PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4",
-                PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false, // Para conexiones SSL
+                PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false,
             ];
             
             $this->pdo = new PDO($dsn, $this->username, $this->password, $options);
@@ -33,15 +48,31 @@ class Database {
             // Log detallado del error
             error_log("Database connection error: " . $e->getMessage());
             
-            // Mostrar mensaje más amigable según el tipo de error
+            // Mensaje amigable según el tipo de error
             if (strpos($e->getMessage(), 'Access denied') !== false) {
-                die("Error de conexión: Credenciales incorrectas. Verifica usuario y contraseña.");
+                die(json_encode([
+                    'success' => false, 
+                    'message' => 'Error de conexión: Credenciales incorrectas. Verifica usuario y contraseña.',
+                    'error' => $e->getMessage()
+                ]));
             } elseif (strpos($e->getMessage(), 'Unknown database') !== false) {
-                die("Error de conexión: Base de datos no encontrada. Verifica el nombre de la base de datos.");
+                die(json_encode([
+                    'success' => false, 
+                    'message' => 'Error de conexión: Base de datos no encontrada. Ejecuta el script database_simple.sql primero.',
+                    'error' => $e->getMessage()
+                ]));
             } elseif (strpos($e->getMessage(), 'Connection refused') !== false || strpos($e->getMessage(), 'timed out') !== false) {
-                die("Error de conexión: No se puede conectar al servidor. Verifica el host y puerto, o revisa tu conexión a internet.");
+                die(json_encode([
+                    'success' => false, 
+                    'message' => 'Error de conexión: No se puede conectar al servidor MySQL. Verifica que MySQL esté corriendo.',
+                    'error' => $e->getMessage()
+                ]));
             } else {
-                die("Error de conexión a la base de datos: " . $e->getMessage());
+                die(json_encode([
+                    'success' => false, 
+                    'message' => 'Error de conexión a la base de datos: ' . $e->getMessage(),
+                    'error' => $e->getMessage()
+                ]));
             }
         }
     }
