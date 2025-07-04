@@ -89,14 +89,8 @@ function validateEmail(email) {
 }
 
 function validatePassword(password) {
-    // Minimum 8 characters, at least one letter and one number
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/;
-    return passwordRegex.test(password);
-}
-
-function validatePhone(phone) {
-    const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
-    return phoneRegex.test(phone.replace(/\s+/g, ''));
+    // Minimum 6 characters
+    return password.length >= 6;
 }
 
 // Login Form Handler
@@ -171,18 +165,21 @@ loginForm.addEventListener('submit', async (e) => {
 registerForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
-    const name = document.getElementById('registerName').value.trim();
-    const lastname = document.getElementById('registerLastname').value.trim();
+    const username = document.getElementById('registerUsername').value.trim();
     const email = document.getElementById('registerEmail').value.trim();
-    const phone = document.getElementById('registerPhone').value.trim();
-    const birthdate = document.getElementById('registerBirthdate').value;
+    const gender = document.getElementById('registerGender').value;
     const password = document.getElementById('registerPassword').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
     const acceptTerms = document.getElementById('acceptTerms').checked;
     
     // Client-side validation
-    if (!name || !lastname) {
-        showModal('Datos incompletos 💔', 'Por favor completa tu nombre y apellido.', false);
+    if (!username) {
+        showModal('Datos incompletos 💔', 'Por favor ingresa tu nombre de usuario.', false);
+        return;
+    }
+    
+    if (username.length < 3) {
+        showModal('Nombre muy corto 💔', 'El nombre de usuario debe tener al menos 3 caracteres.', false);
         return;
     }
     
@@ -191,29 +188,13 @@ registerForm.addEventListener('submit', async (e) => {
         return;
     }
     
-    if (!validatePhone(phone)) {
-        showModal('Teléfono inválido 💔', 'Por favor ingresa un número de teléfono válido.', false);
-        return;
-    }
-    
-    if (!birthdate) {
-        showModal('Fecha requerida 💔', 'Por favor ingresa tu fecha de nacimiento.', false);
-        return;
-    }
-    
-    // Check if user is at least 13 years old
-    const today = new Date();
-    const birth = new Date(birthdate);
-    const age = today.getFullYear() - birth.getFullYear();
-    const monthDiff = today.getMonth() - birth.getMonth();
-    
-    if (age < 13 || (age === 13 && monthDiff < 0)) {
-        showModal('Edad mínima requerida 💔', 'Debes tener al menos 13 años para registrarte.', false);
+    if (!gender) {
+        showModal('Género requerido 💔', 'Por favor selecciona tu género.', false);
         return;
     }
     
     if (!validatePassword(password)) {
-        showModal('Contraseña débil 💔', 'La contraseña debe tener al menos 8 caracteres, una letra y un número.', false);
+        showModal('Contraseña débil 💔', 'La contraseña debe tener al menos 6 caracteres.', false);
         return;
     }
     
@@ -242,11 +223,9 @@ registerForm.addEventListener('submit', async (e) => {
             },
             body: JSON.stringify({
                 action: 'register',
-                name: name,
-                lastname: lastname,
+                username: username,
                 email: email,
-                phone: phone,
-                birthdate: birthdate,
+                gender: gender,
                 password: password
             })
         });

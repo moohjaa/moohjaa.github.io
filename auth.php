@@ -39,7 +39,7 @@ class Auth {
         $this->db = (new Database())->getConnection();
     }
     
-    public function register($name, $lastname, $email, $phone, $birthdate, $password) {
+    public function register($username, $email, $password, $gender) {
         try {
             // Check if email already exists
             $stmt = $this->db->prepare("SELECT id FROM users WHERE email = ?");
@@ -49,22 +49,28 @@ class Auth {
                 return ['success' => false, 'message' => 'Este email ya está registrado. ¿Ya tienes cuenta?'];
             }
             
+            // Check if username already exists
+            $stmt = $this->db->prepare("SELECT id FROM users WHERE username = ?");
+            $stmt->execute([$username]);
+            
+            if ($stmt->fetch()) {
+                return ['success' => false, 'message' => 'Este nombre de usuario ya está en uso. Prueba con otro.'];
+            }
+            
             // Hash password
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
             
             // Insert new user
             $stmt = $this->db->prepare("
-                INSERT INTO users (name, lastname, email, phone, birthdate, password, created_at) 
-                VALUES (?, ?, ?, ?, ?, ?, NOW())
+                INSERT INTO users (username, email, password, gender, created_at) 
+                VALUES (?, ?, ?, ?, NOW())
             ");
             
             $stmt->execute([
-                $name, 
-                $lastname, 
+                $username, 
                 $email, 
-                $phone, 
-                $birthdate, 
-                $hashedPassword
+                $hashedPassword,
+                $gender
             ]);
             
             return ['success' => true, 'message' => 'Usuario registrado exitosamente'];
@@ -76,7 +82,7 @@ class Auth {
     
     public function login($email, $password, $remember = false) {
         try {
-            $stmt = $this->db->prepare("SELECT id, name, lastname, email, password, is_active FROM users WHERE email = ?");
+            $stmt = $this->db->prepare("SELECT id, username, email, password, gender, is_active FROM users WHERE email = ?");
             $stmt->execute([$email]);
             $user = $stmt->fetch();
             
@@ -91,9 +97,9 @@ class Auth {
             if (password_verify($password, $user['password'])) {
                 // Set session variables
                 $_SESSION['user_id'] = $user['id'];
-                $_SESSION['user_name'] = $user['name'];
-                $_SESSION['user_lastname'] = $user['lastname'];
+                $_SESSION['user_name'] = $user['username'];
                 $_SESSION['user_email'] = $user['email'];
+                $_SESSION['user_gender'] = $user['gender'];
                 $_SESSION['logged_in'] = true;
                 
                 // Update last login
@@ -136,15 +142,15 @@ class Auth {
         if (isset($_COOKIE['remember_token']) && !isset($_SESSION['logged_in'])) {
             $token = $_COOKIE['remember_token'];
             
-            $stmt = $this->db->prepare("SELECT id, name, lastname, email FROM users WHERE remember_token = ? AND is_active = 1");
+            $stmt = $this->db->prepare("SELECT id, username, email, gender FROM users WHERE remember_token = ? AND is_active = 1");
             $stmt->execute([$token]);
             $user = $stmt->fetch();
             
             if ($user) {
                 $_SESSION['user_id'] = $user['id'];
-                $_SESSION['user_name'] = $user['name'];
-                $_SESSION['user_lastname'] = $user['lastname'];
+                $_SESSION['user_name'] = $user['username'];
                 $_SESSION['user_email'] = $user['email'];
+                $_SESSION['user_gender'] = $user['gender'];
                 $_SESSION['logged_in'] = true;
                 
                 return true;
@@ -173,15 +179,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     switch ($input['action']) {
         case 'register':
-            $name = trim($input['name'] ?? '');
-            $lastname = trim($input['lastname'] ?? '');
+            $username = trim($input['username'] ?? '');
             $email = trim($input['email'] ?? '');
-            $phone = trim($input['phone'] ?? '');
-            $birthdate = $input['birthdate'] ?? '';
             $password = $input['password'] ?? '';
+            $gender = $input['gender'] ?? '';
             
             // Server-side validation
-            if (empty($name) || empty($lastname) || empty($email) || empty($password)) {
+            if (empty($username) || empty($email) || empty($password) || empty($gender)) {
                 echo json_encode(['success' => false, 'message' => 'Todos los campos son obligatorios']);
                 exit;
             }
@@ -191,12 +195,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit;
             }
             
-            if (strlen($password) < 8) {
-                echo json_encode(['success' => false, 'message' => 'La contraseña debe tener al menos 8 caracteres']);
+            if (strlen($password) < 6) {
+                echo json_encode(['success' => false, 'message' => 'La contraseña debe tener al menos 6 caracteres']);
                 exit;
             }
             
-            $result = $auth->register($name, $lastname, $email, $phone, $birthdate, $password);
+            if (strlen($username) < 3) {
+                echo json_encode(['success' => false, 'message' => 'El nombre de usuario debe tener al menos 3 caracteres']);
+                exit;
+            }
+            
+            $validGenders = ['masculino', 'femenino', 'otro', 'prefiero_no_decir'];
+            if (!in_array($gender, $validGenders)) {
+                echo json_encode(['success' => false, 'message' => 'Género no válido']);
+                exit;
+            }
+            
+            $result = $auth->register($username, $email, $password, $gender);
             echo json_encode($result);
             break;
             

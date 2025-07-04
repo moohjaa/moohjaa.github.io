@@ -170,6 +170,19 @@ body {
     margin-bottom: 10px;
 }
 
+.user-gender {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: linear-gradient(135deg, #ff6b9d, #ff8fab);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+
 .user-status {
     display: inline-flex;
     align-items: center;

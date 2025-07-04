@@ -8,8 +8,8 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
 }
 
 $userName = $_SESSION['user_name'];
-$userLastname = $_SESSION['user_lastname'];
 $userEmail = $_SESSION['user_email'];
+$userGender = $_SESSION['user_gender'] ?? 'otro';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -59,8 +59,19 @@ $userEmail = $_SESSION['user_email'];
                         <i class="fas fa-user-circle"></i>
                     </div>
                     <div class="user-details">
-                        <h3><?php echo htmlspecialchars($userName . ' ' . $userLastname); ?></h3>
+                        <h3><?php echo htmlspecialchars($userName); ?></h3>
                         <p><?php echo htmlspecialchars($userEmail); ?></p>
+                        <span class="user-gender">
+                            <?php 
+                                $genderIcons = [
+                                    'masculino' => '♂️ Masculino',
+                                    'femenino' => '♀️ Femenino', 
+                                    'otro' => '⚧️ Otro',
+                                    'prefiero_no_decir' => '🤐 Prefiero no decir'
+                                ];
+                                echo $genderIcons[$userGender] ?? '⚧️ Otro';
+                            ?>
+                        </span>
                         <span class="user-status"><i class="fas fa-circle"></i> Conectado</span>
                     </div>
                 </div>

@@ -84,15 +84,9 @@
                     <p>Crea tu cuenta y comienza tu aventura romántica</p>
                 </div>
 
-                <div class="input-row">
-                    <div class="input-group">
-                        <i class="fas fa-user"></i>
-                        <input type="text" id="registerName" placeholder="Tu nombre hermoso" required>
-                    </div>
-                    <div class="input-group">
-                        <i class="fas fa-user-circle"></i>
-                        <input type="text" id="registerLastname" placeholder="Tu apellido encantador" required>
-                    </div>
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="registerUsername" placeholder="Nombre de usuario" required>
                 </div>
 
                 <div class="input-group">
@@ -101,14 +95,14 @@
                 </div>
 
                 <div class="input-group">
-                    <i class="fas fa-phone"></i>
-                    <input type="tel" id="registerPhone" placeholder="Tu número especial" required>
-                </div>
-
-                <div class="input-group">
-                    <i class="fas fa-calendar-heart"></i>
-                    <input type="date" id="registerBirthdate" required>
-                    <label for="registerBirthdate">Fecha de nacimiento</label>
+                    <i class="fas fa-venus-mars"></i>
+                    <select id="registerGender" required>
+                        <option value="">Selecciona tu género</option>
+                        <option value="femenino">♀️ Femenino</option>
+                        <option value="masculino">♂️ Masculino</option>
+                        <option value="otro">⚧️ Otro</option>
+                        <option value="prefiero_no_decir">🤐 Prefiero no decir</option>
+                    </select>
                 </div>
 
                 <div class="input-group">

@@ -192,7 +192,25 @@ body {
     transition: all 0.3s ease;
 }
 
-.input-group input:focus {
+.input-group select {
+    width: 100%;
+    padding: 15px 50px 15px 45px;
+    border: 2px solid rgba(255, 182, 193, 0.3);
+    border-radius: 15px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    background: rgba(255, 255, 255, 0.8);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'><path fill='%23ff6b9d' d='M2 0L0 2h4zm0 5L0 3h4z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 12px;
+}
+
+.input-group input:focus,
+.input-group select:focus {
     outline: none;
     border-color: #ff6b9d;
     box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.1);
