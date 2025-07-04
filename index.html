@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💕 Amor Digital - Tu Espacio Romántico 💕</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="background-hearts">
+        <div class="heart heart1">💖</div>
+        <div class="heart heart2">💕</div>
+        <div class="heart heart3">💗</div>
+        <div class="heart heart4">❤️</div>
+        <div class="heart heart5">💝</div>
+    </div>
+
+    <div class="container">
+        <div class="form-container">
+            <div class="form-toggle">
+                <button id="loginBtn" class="toggle-btn active">
+                    <i class="fas fa-heart"></i> Iniciar Sesión
+                </button>
+                <button id="registerBtn" class="toggle-btn">
+                    <i class="fas fa-user-plus"></i> Registrarse
+                </button>
+            </div>
+
+            <!-- Formulario de Login -->
+            <form id="loginForm" class="auth-form active">
+                <div class="form-header">
+                    <h2><i class="fas fa-heart"></i> Bienvenido de vuelta, amor</h2>
+                    <p>Ingresa a tu espacio romántico personal</p>
+                </div>
+
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="loginEmail" placeholder="Tu email del corazón" required>
+                </div>
+
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="loginPassword" placeholder="Contraseña secreta" required>
+                    <button type="button" class="password-toggle" onclick="togglePassword('loginPassword')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+
+                <div class="remember-forgot">
+                    <label class="remember-me">
+                        <input type="checkbox" id="rememberMe">
+                        <span class="checkmark"></span>
+                        Recordarme siempre 💕
+                    </label>
+                    <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-heart"></i> Entrar al Amor
+                </button>
+
+                <div class="social-login">
+                    <p>O conecta con:</p>
+                    <div class="social-buttons">
+                        <button type="button" class="social-btn google">
+                            <i class="fab fa-google"></i>
+                        </button>
+                        <button type="button" class="social-btn facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </button>
+                        <button type="button" class="social-btn instagram">
+                            <i class="fab fa-instagram"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Formulario de Registro -->
+            <form id="registerForm" class="auth-form">
+                <div class="form-header">
+                    <h2><i class="fas fa-heart"></i> Únete a nuestra historia de amor</h2>
+                    <p>Crea tu cuenta y comienza tu aventura romántica</p>
+                </div>
+
+                <div class="input-row">
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="registerName" placeholder="Tu nombre hermoso" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-user-circle"></i>
+                        <input type="text" id="registerLastname" placeholder="Tu apellido encantador" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="registerEmail" placeholder="Tu email del corazón" required>
+                </div>
+
+                <div class="input-group">
+                    <i class="fas fa-phone"></i>
+                    <input type="tel" id="registerPhone" placeholder="Tu número especial" required>
+                </div>
+
+                <div class="input-group">
+                    <i class="fas fa-calendar-heart"></i>
+                    <input type="date" id="registerBirthdate" required>
+                    <label for="registerBirthdate">Fecha de nacimiento</label>
+                </div>
+
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="registerPassword" placeholder="Contraseña secreta" required>
+                    <button type="button" class="password-toggle" onclick="togglePassword('registerPassword')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="confirmPassword" placeholder="Confirma tu contraseña" required>
+                    <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+
+                <div class="terms-conditions">
+                    <label class="remember-me">
+                        <input type="checkbox" id="acceptTerms" required>
+                        <span class="checkmark"></span>
+                        Acepto los <a href="#">términos y condiciones</a> y la <a href="#">política de privacidad</a> 💖
+                    </label>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-heart"></i> Crear mi cuenta de amor
+                </button>
+
+                <div class="social-login">
+                    <p>O regístrate con:</p>
+                    <div class="social-buttons">
+                        <button type="button" class="social-btn google">
+                            <i class="fab fa-google"></i>
+                        </button>
+                        <button type="button" class="social-btn facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </button>
+                        <button type="button" class="social-btn instagram">
+                            <i class="fab fa-instagram"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de mensajes -->
+    <div id="messageModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="modal-icon">
+                <i class="fas fa-heart"></i>
+            </div>
+            <h3 id="modalTitle">Mensaje</h3>
+            <p id="modalMessage">Contenido del mensaje</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

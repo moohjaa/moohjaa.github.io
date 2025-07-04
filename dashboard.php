@@ -1,0 +1,240 @@
+<?php
+session_start();
+
+// Check if user is logged in
+if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
+    header('Location: index.html');
+    exit;
+}
+
+$userName = $_SESSION['user_name'];
+$userLastname = $_SESSION['user_lastname'];
+$userEmail = $_SESSION['user_email'];
+?>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💕 Dashboard del Amor - Bienvenido/a <?php echo htmlspecialchars($userName); ?> 💕</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="background-hearts">
+        <div class="heart heart1">💖</div>
+        <div class="heart heart2">💕</div>
+        <div class="heart heart3">💗</div>
+        <div class="heart heart4">❤️</div>
+        <div class="heart heart5">💝</div>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-heart"></i>
+                <span>Amor Digital</span>
+            </div>
+            <div class="nav-menu">
+                <a href="#" class="nav-link"><i class="fas fa-home"></i> Inicio</a>
+                <a href="#" class="nav-link"><i class="fas fa-user"></i> Perfil</a>
+                <a href="#" class="nav-link"><i class="fas fa-heart"></i> Favoritos</a>
+                <a href="#" class="nav-link"><i class="fas fa-cog"></i> Configuración</a>
+                <a href="#" class="nav-link logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="welcome-section">
+            <div class="welcome-card">
+                <div class="welcome-header">
+                    <h1>¡Bienvenido/a de vuelta, <?php echo htmlspecialchars($userName); ?>! 💕</h1>
+                    <p>Tu espacio romántico te ha extrañado</p>
+                </div>
+                
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div class="user-details">
+                        <h3><?php echo htmlspecialchars($userName . ' ' . $userLastname); ?></h3>
+                        <p><?php echo htmlspecialchars($userEmail); ?></p>
+                        <span class="user-status"><i class="fas fa-circle"></i> Conectado</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="card love-quotes">
+                <div class="card-header">
+                    <h3><i class="fas fa-quote-left"></i> Frase del Día</h3>
+                </div>
+                <div class="card-content">
+                    <div class="quote">
+                        <p id="dailyQuote">"El amor es la única fuerza capaz de transformar a un enemigo en un amigo."</p>
+                        <span class="quote-author">- Martin Luther King Jr.</span>
+                    </div>
+                    <button class="refresh-quote" onclick="getNewQuote()">
+                        <i class="fas fa-sync-alt"></i> Nueva frase
+                    </button>
+                </div>
+            </div>
+
+            <div class="card love-calculator">
+                <div class="card-header">
+                    <h3><i class="fas fa-heart"></i> Calculadora del Amor</h3>
+                </div>
+                <div class="card-content">
+                    <div class="calculator-form">
+                        <input type="text" id="name1" placeholder="Tu nombre" class="love-input">
+                        <div class="love-symbol">💕</div>
+                        <input type="text" id="name2" placeholder="Nombre de tu amor" class="love-input">
+                        <button onclick="calculateLove()" class="calculate-btn">
+                            <i class="fas fa-heart"></i> Calcular
+                        </button>
+                        <div id="loveResult" class="love-result"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card love-messages">
+                <div class="card-header">
+                    <h3><i class="fas fa-envelope-heart"></i> Mensajes de Amor</h3>
+                </div>
+                <div class="card-content">
+                    <div class="message-form">
+                        <textarea id="loveMessage" placeholder="Escribe un mensaje romántico..." rows="3"></textarea>
+                        <div class="message-actions">
+                            <button onclick="generateRandomMessage()" class="generate-btn">
+                                <i class="fas fa-magic"></i> Generar
+                            </button>
+                            <button onclick="saveLoveMessage()" class="save-btn">
+                                <i class="fas fa-heart"></i> Guardar
+                            </button>
+                        </div>
+                    </div>
+                    <div class="saved-messages" id="savedMessages">
+                        <!-- Los mensajes guardados aparecerán aquí -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="card romantic-timer">
+                <div class="card-header">
+                    <h3><i class="fas fa-clock"></i> Temporizador Romántico</h3>
+                </div>
+                <div class="card-content">
+                    <div class="timer-display">
+                        <div id="timerDisplay">00:00:00</div>
+                        <p>Tiempo juntos hoy</p>
+                    </div>
+                    <div class="timer-controls">
+                        <button onclick="startTimer()" class="timer-btn start">
+                            <i class="fas fa-play"></i> Iniciar
+                        </button>
+                        <button onclick="pauseTimer()" class="timer-btn pause">
+                            <i class="fas fa-pause"></i> Pausar
+                        </button>
+                        <button onclick="resetTimer()" class="timer-btn reset">
+                            <i class="fas fa-stop"></i> Reiniciar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card love-calendar">
+                <div class="card-header">
+                    <h3><i class="fas fa-calendar-heart"></i> Fechas Especiales</h3>
+                </div>
+                <div class="card-content">
+                    <div class="special-dates">
+                        <div class="date-item">
+                            <div class="date-icon">💝</div>
+                            <div class="date-info">
+                                <h4>San Valentín</h4>
+                                <p>14 de Febrero</p>
+                                <span class="countdown" id="valentinesCountdown"></span>
+                            </div>
+                        </div>
+                        <div class="date-item">
+                            <div class="date-icon">💐</div>
+                            <div class="date-info">
+                                <h4>Día de la Madre</h4>
+                                <p>2do Domingo de Mayo</p>
+                                <span class="countdown" id="mothersCountdown"></span>
+                            </div>
+                        </div>
+                        <div class="date-item">
+                            <div class="date-icon">🌹</div>
+                            <div class="date-info">
+                                <h4>Día del Amor y la Amistad</h4>
+                                <p>Septiembre</p>
+                                <span class="countdown" id="friendshipCountdown"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="addCustomDate()" class="add-date-btn">
+                        <i class="fas fa-plus"></i> Agregar fecha especial
+                    </button>
+                </div>
+            </div>
+
+            <div class="card love-stats">
+                <div class="card-header">
+                    <h3><i class="fas fa-chart-heart"></i> Estadísticas del Amor</h3>
+                </div>
+                <div class="card-content">
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-number">1</div>
+                            <div class="stat-label">Días registrado</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="messagesCount">0</div>
+                            <div class="stat-label">Mensajes guardados</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="quotesRead">0</div>
+                            <div class="stat-label">Frases leídas</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="timeSpent">0</div>
+                            <div class="stat-label">Minutos en el amor</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para fechas personalizadas -->
+    <div id="customDateModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Agregar Fecha Especial</h3>
+            <form id="customDateForm">
+                <div class="input-group">
+                    <label for="customDateName">Nombre del evento:</label>
+                    <input type="text" id="customDateName" placeholder="Ej: Nuestro aniversario" required>
+                </div>
+                <div class="input-group">
+                    <label for="customDate">Fecha:</label>
+                    <input type="date" id="customDate" required>
+                </div>
+                <div class="input-group">
+                    <label for="customDateIcon">Emoji (opcional):</label>
+                    <input type="text" id="customDateIcon" placeholder="💕" maxlength="2">
+                </div>
+                <button type="submit" class="save-date-btn">
+                    <i class="fas fa-heart"></i> Guardar fecha
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
